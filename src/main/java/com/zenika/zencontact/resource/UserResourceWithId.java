@@ -1,11 +1,13 @@
 package com.zenika.zencontact.resource;
 
 import com.zenika.zencontact.domain.User;
+import com.zenika.zencontact.persistence.UserDao;
 import com.zenika.zencontact.persistence.UserRepository;
 import com.google.gson.Gson;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.zenika.zencontact.persistence.datastore.UserDaoDatastore;
+import com.zenika.zencontact.persistence.objectify.UserDaoObjectify;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "UserResourceWithId", value = "/api/v0/users/*")
 public class UserResourceWithId extends HttpServlet {
 
-  private Long getId(HttpServletRequest request) {
+//    private UserDao userDao = UserDaoDatastore.getInstance();
+    private UserDao userDao = UserDaoObjectify.getInstance();
+
+    private Long getId(HttpServletRequest request) {
     String pathInfo = request.getPathInfo(); // /{id}
     String[] pathParts = pathInfo.split("/");
     if(pathParts.length == 0) {
@@ -34,7 +39,7 @@ public class UserResourceWithId extends HttpServlet {
         response.setStatus(404);
         return;
     }
-    User user =  UserDaoDatastore.getInstance().get(id);
+    User user =  userDao.get(id);
     response.setContentType("application/json; charset=utf-8");
     response.getWriter().println(new Gson().toJson(user));
   }
@@ -48,7 +53,7 @@ public class UserResourceWithId extends HttpServlet {
         return;
     }
     User user = new Gson().fromJson(request.getReader(), User.class);
-    UserDaoDatastore.getInstance().save(user);
+    userDao.save(user);
     response.setContentType("application/json; charset=utf-8");
     response.getWriter().println(new Gson().toJson(user));
   }
@@ -61,7 +66,7 @@ public class UserResourceWithId extends HttpServlet {
         response.setStatus(404);
         return;
     }
-    UserDaoDatastore.getInstance().delete(id);
+    userDao.delete(id);
   }
 }
 

@@ -109,6 +109,11 @@ limitations under the License.
       <version>2.12.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.googlecode.objectify</groupId>
+      <artifactId>objectify</artifactId>
+      <version>5.1.21</version>
+    </dependency>
     <!-- [END_EXCLUDE] -->
   </dependencies>
 
