@@ -57,6 +57,7 @@ public class UserResourceWithId extends HttpServlet {
         }
         User user = new Gson().fromJson(request.getReader(), User.class);
         userDao.save(user);
+        UserResource.cache.delete(UserResource.CONTACT_CACHE_KEY);
         response.setContentType("application/json; charset=utf-8");
         response.getWriter().println(new Gson().toJson(user));
     }
@@ -69,6 +70,7 @@ public class UserResourceWithId extends HttpServlet {
             response.setStatus(404);
             return;
         }
+        UserResource.cache.delete(UserResource.CONTACT_CACHE_KEY);
         userDao.delete(id);
     }
 }
